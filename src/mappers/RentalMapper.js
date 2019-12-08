@@ -18,15 +18,15 @@ class RentalMapper {
     });
   }
 
-  toRow(car) {
+  toRow(rental) {
     return {
-      rental_id: car.getID(),
-      car_id: car.getCarID(),
-      start: car.getDuration().start,
-      end: car.getDuration().end,
-      active: car.isActive(),
-      price_amount: car.getPrice().amount,
-      price_currency: car.getPrice().currency,
+      rental_id: rental.getID(),
+      car_id: rental.getCarID(),
+      start: rental.getDuration().start,
+      end: rental.getDuration().end,
+      active: rental.isActive(),
+      price_amount: rental.getPrice().amount,
+      price_currency: rental.getPrice().currency,
     };
   }
 

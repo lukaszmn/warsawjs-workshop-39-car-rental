@@ -10,7 +10,9 @@ const path = require('path');
 const routes = require('./routes');
 const db = require('./db');
 
-const app = fastify();
+const app = fastify({
+  logger: true
+});
 // Add a security middleware:
 app.register(helmet);
 // Enable parsing of application/x-www-form-urlencoded:

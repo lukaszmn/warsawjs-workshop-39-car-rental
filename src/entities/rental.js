@@ -10,7 +10,7 @@ class Rental {
     duration = null,
     active = false,
     price = null
-  }) {
+  } = {}) {
     this._rentalID = rentalID;
     this._carID = carID;
     this._duration = duration ? new DateRange(duration) : null;
@@ -22,7 +22,7 @@ class Rental {
 
   getID() { return this._rentalID; }
   getCarID() { return this._carID; }
-  getDuration() { return this.duration; }
+  getDuration() { return this._duration; }
   isActive() { return this._active; }
   getPrice() { return this._price; }
 

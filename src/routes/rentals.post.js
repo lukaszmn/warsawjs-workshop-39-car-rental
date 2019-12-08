@@ -1,8 +1,7 @@
 'use strict';
 
-const Cars = require('../modules/cars');
+const CommandHandler = require('../modules/CommandHandler');
 const DateRange = require('../types/DateRange');
-const CarMapper = require('../mappers/CarMapper');
 
 module.exports = function(app, { db }) {
   app.post('/rentals', {
@@ -27,31 +26,14 @@ module.exports = function(app, { db }) {
     // Otherwise, we'd have to deal with a separate pick-up operation.
     const start = new Date(request.body.date_start);
     const end = new Date(request.body.date_end);
+
     const { car, price, days } = await db.transaction(async function(transaction) {
 
-      const mapper = new CarMapper({ db: transaction });
-      const { price, days, car } = await new Cars({ mapper })
-        .getOffer(car_id, new DateRange({ start, end }));
-
-      if (car.isRented()) {
-        throw new Error('This car is already rented');
-      }
-
-      // Actually save the rental contract and mark the car as taken:
-      const [ rental_id ] = await transaction('rentals')
-        .insert({
-          car_id: car_id,
-          start: start,
-          end: end,
-          active: true,
-          price_amount: price.amount,
-          price_currency: price.currency
-        }, [ 'rental_id' ]);
-      await transaction('cars')
-        .update({ rented: true, rental_id: rental_id })
-        .where({ car_id: car_id });
+      const { price, days, car } = await new CommandHandler({ db: transaction })
+        .startRental(car_id, new DateRange({ start, end }));
       return { car, price, days };
     });
+
     reply.view('rental-started', {
       car,
       price,
