@@ -2,6 +2,7 @@
 
 const Cars = require('../modules/cars');
 const DateRange = require('../types/DateRange');
+const CarMapper = require('../mappers/CarMapper');
 
 module.exports = function(app, { db }) {
   app.post('/rentals', {
@@ -28,7 +29,8 @@ module.exports = function(app, { db }) {
     const end = new Date(request.body.date_end);
     const { car, price, days } = await db.transaction(async function(transaction) {
 
-      const { price, days, car } = await new Cars({ db: transaction })
+      const mapper = new CarMapper({ db: transaction });
+      const { price, days, car } = await new Cars({ mapper })
         .getOffer(car_id, new DateRange({ start, end }));
 
       if (car.rented) {

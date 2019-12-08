@@ -1,13 +1,18 @@
 'use strict';
 
+const CarMapper = require('../mappers/CarMapper');
+
 const listPrice = require('../strategies/listPrice');
-const Money = require('../types/Money');
 const DateRange = require('../types/DateRange');
 
 class Cars {
 
-  constructor({ db }) {
-    this._db = db;
+  /**
+   * @param {Object} param
+   * @param {(CarMapper)} param.mapper
+   */
+  constructor({ mapper }) {
+    this._mapper = mapper;
   }
 
   /**
@@ -16,16 +21,11 @@ class Cars {
    * @param {DateRange} dateRange Term of rental
    */
   async getOffer(carID, dateRange) {
-    const db = this._db;
+    const mapper = this._mapper;
 
-    const car = await db('cars')
-      .first()
-      .where({ car_id: carID });
-    if (!car) {
-      return Promise.reject(new Error('No entry found for car: ' + carID));
-    }
+    const car = await mapper.find({ ID: carID });
     const { price, days } = listPrice(
-      new Money({ amount: car.list_price_amount, currency: car.list_price_currency }),
+      car.getListPrice(),
       dateRange
     );
 

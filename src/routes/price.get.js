@@ -2,6 +2,7 @@
 
 const Cars = require('../modules/cars');
 const DateRange = require('../types/DateRange');
+const CarMapper = require('../mappers/CarMapper');
 
 module.exports = function(app, { db }) {
   app.get('/price', {
@@ -21,7 +22,8 @@ module.exports = function(app, { db }) {
     const start = new Date(request.query.date_start);
     const end = new Date(request.query.date_end);
 
-    const { price, days, car } = await new Cars({db})
+    const mapper = new CarMapper({ db });
+    const { price, days, car } = await new Cars({ mapper })
       .getOffer(car_id, new DateRange({ start, end }));
 
     reply.view('price', {
