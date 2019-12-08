@@ -33,7 +33,7 @@ module.exports = function(app, { db }) {
       const { price, days, car } = await new Cars({ mapper })
         .getOffer(car_id, new DateRange({ start, end }));
 
-      if (car.rented) {
+      if (car.isRented()) {
         throw new Error('This car is already rented');
       }
 
