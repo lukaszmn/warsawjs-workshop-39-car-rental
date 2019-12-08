@@ -30,7 +30,13 @@ module.exports = function(app, { db }) {
     const { car, price, days } = await db.transaction(async function(transaction) {
 
       const { price, days, car } = await new CommandHandler({ db: transaction })
-        .startRental(car_id, new DateRange({ start, end }));
+        .startRental(
+          car_id,
+          new DateRange({ start, end }),
+          {
+            age: request.body.customer_age
+          }
+        );
       return { car, price, days };
     });
 

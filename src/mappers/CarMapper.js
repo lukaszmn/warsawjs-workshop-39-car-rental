@@ -1,6 +1,7 @@
 'use strict';
 
 const Car = require('../entities/car');
+const FastCar = require('../entities/FastCar');
 
 class CarMapper {
 
@@ -9,7 +10,13 @@ class CarMapper {
   }
 
   fromRow(row) {
-    return new Car({
+    let carContructor;
+    if (row.policy === 'fast')
+      carContructor = FastCar;
+    else
+      carContructor = Car;
+
+    return new carContructor({
       carID: row.car_id,
       make: row.make,
       model: row.model,

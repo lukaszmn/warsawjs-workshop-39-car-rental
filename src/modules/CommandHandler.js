@@ -41,7 +41,7 @@ class CommandHandler {
     rental.start(carID, duration, price);
     await rentals.insert(rental);
 
-    car.rent(rental.getID());
+    car.rent(rental.getID(), customerData);
     cars.update(car);
 
     return { car, price, days };
