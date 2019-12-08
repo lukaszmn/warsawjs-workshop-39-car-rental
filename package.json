@@ -4,7 +4,7 @@
   "description": "an example car rental application for learning software design patterns",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e .js,.ejs,.json server.js",
+    "start": "nodemon -e .js,.ejs,.json server.js | npx pino-pretty",
     "db": "knex migrate:latest && knex seed:run",
     "test": "echo \"No test specified\" && exit 1"
   },
